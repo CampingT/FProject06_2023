@@ -1,0 +1,178 @@
+﻿﻿@model IEnumerable<FProjectCampingBackend.Models.ViewModels.Members.MemberVm>
+@using PagedList.Mvc;
+@using PagedList;
+@{
+    ViewBag.Title = "會員管理";
+
+
+}
+
+
+<h2>會員管理</h2>
+
+<div class="mb-3" style="width:100%">
+    @using (Html.BeginForm("Index", "Members", FormMethod.Get))
+    {
+        <div class="membersearch">
+
+            <div>
+                姓名:@Html.TextBox("Name", null, new { @class = "form-control form-control-sm me-3", style = "width:auto;display:inline-block;" })
+            </div>
+            <div>
+                帳號:@Html.TextBox("Account", null, new { @class = "form-control form-control-sm me-3", style = "width:auto;display:inline-block;" })
+            </div>
+            <div>
+                是否停權:@Html.DropDownList("Enabled", null, new { @class = "form-select form select-sm me-3 ms-3", style = "width:auto;display:inline-block;" })
+            </div>
+            <div>
+                是否驗證:@Html.DropDownList("IsConfirmed", ViewData["IsConfirmed"] as SelectList, null, new { @class = "form-select form select-sm me-3 ms-3", style = "width:auto;display:inline-block;" })
+            </div>
+            <div>
+                建立時間:
+                @Html.TextBox("FirstTime", null, new { @class = "form-control form-control-sm", style = "width:auto;display:inline-block;", type = "date", onchange = "updateEndTime()" })
+                ~
+                @Html.TextBox("EndTime", null, new { @class = "form-control form-control-sm me-3", style = "width:auto;display:inline-block;", type = "date" })
+            </div>
+            <div>
+                <input type="submit" value="查詢" class="btn btn-primary" />
+            </div>
+        </div>
+
+
+    }
+
+
+
+</div>
+
+<table class="table table-striped">
+
+    <tr class="table-dark">
+        <th>
+            @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th style="margin:0 auto;">
+            @Html.DisplayNameFor(model => model.Account)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PhoneNum)
+        </th>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.Enabled)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedTime)
+        </th>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.IsConfirmedDisplayName)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+
+            <td style="margin:0 auto;">
+
+                @if (item.Photo == null)
+                {
+                    <div class="memberPhoto">
+                        <img src="/images/camping_no.jpg" alt="大頭照" class="img-fluid memberPhoto">
+                    </div>
+                }
+                else
+                {
+                    <div class="memberPhoto">
+                        <img src="/files/@Html.DisplayFor(modelItem => item.Photo)" alt="item.Account" class="img-fluid" />
+                    </div>
+                }
+                @Html.DisplayFor(modelItem => item.Account)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNum)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.EnabledStatus)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedTime)
+            </td>
+
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.IsConfirmedDisplayName)
+            </td>
+            <td>
+                <i class="bi bi-pen-fill"></i>
+                @Html.ActionLink("編輯", "Edit", new { id = item.Id }, new { @class = "" })
+
+            </td>
+        </tr>
+    }
+
+</table>
+
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new
+{
+    page,
+    Name = Request.QueryString["Name"],
+    Account = Request.QueryString["Account"],
+    Enabled = Request.QueryString["Enabled"],
+    IsConfirmed = Request.QueryString["IsConfirmed"],
+    FirstTime = Request.QueryString["FirstTime"],
+    EndTime = Request.QueryString["EndTime"]
+}))
+@*@Html.PagedListPager((IPagedList)Model, x => Url.Action("Index", new { page = x }))*@
+
+
+
+@section scripts{
+
+    <script>
+        function updateEndTime() {
+            var firstTime = new Date(document.getElementById('FirstTime').value);
+            var endTimeField = document.getElementById('EndTime');
+            var endTime = new Date(firstTime);
+            endTime.setDate(endTime.getDate() + 1);
+
+
+            if (endTime < firstTime) {
+                endTime = new Date(firstTime);
+                endTime.setDate(firstTime.getDate() + 1);
+            }
+
+
+            var selectedEndTime = new Date(endTimeField.value);
+
+
+            if (selectedEndTime <= firstTime) {
+                endTimeField.value = endTime.toISOString().split('T')[0];
+            }
+
+            endTimeField.min = endTime.toISOString().split('T')[0];
+        }
+    </script>
+}
+
+@section css{
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+    <link href="~/css/memberIndex.css" rel="stylesheet" />
+
+}

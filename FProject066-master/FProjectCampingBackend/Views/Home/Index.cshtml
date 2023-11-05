@@ -1,0 +1,100 @@
+﻿
+@{
+    ViewBag.Title = "首頁";
+    var newOrders = ViewBag.NewOrders as IEnumerable<FProjectCampingBackend.Models.ViewModels.OrderMemberNewVm>;
+    var checkToday = ViewBag.TodayCheck as IEnumerable<FProjectCampingBackend.Models.ViewModels.Orders.TodayCheckVm>;
+  
+
+}
+
+
+@model IEnumerable<FProjectCampingBackend.Models.EFModels.Member>
+
+@{
+    if (User.Identity.IsAuthenticated)
+    {
+
+        <div class="mainarea">
+            <div class="listarea todayCheckOrder">
+                <h2><span><img src="~/images/campinglogo3.png" alt="Camping" class="todayimg"></span>今日入住</h2>
+                @{
+                    Html.RenderPartial("_mod_CheckToday", checkToday);
+
+                }
+            </div>
+            <div class="listarea area1">
+                <h2><i class="bi bi-people-fill"></i>最新會員</h2>
+
+
+                @{
+                    Html.RenderPartial("_mod_lastestMember");
+                }
+                @{
+                    if (User.Identity.IsAuthenticated && User.Identity.Name == "allen")
+                    {
+                        <div class="text-end"><a href="/Members/Index/">more...</a></div>
+                    }
+                    else if (User.Identity.IsAuthenticated)
+                    {
+
+                    }
+                }
+
+            </div>
+            <div class="listarea area2">
+                <h2><i class="bi bi-layout-text-window-reverse"></i>最新訂單</h2>
+                @{
+                    Html.RenderPartial("_mod_newOrder", newOrders);
+
+                }
+                @{
+                    if (User.Identity.IsAuthenticated && User.Identity.Name == "allen")
+                    {
+
+                        <div class="text-end"><a href="/Orders/Index/">more...</a></div>
+                    }
+                    else if (User.Identity.IsAuthenticated)
+                    {
+
+                    }
+                }
+
+            </div>
+
+
+
+        </div>
+    }
+    else
+    {
+
+        <div class="mainarea">
+            <div class="imgarea">
+                <img src="~/images/photo1.jpg" alt="Camping放鬆村" />
+            </div>
+
+
+
+        </div>
+
+    }
+}
+
+
+@section css{
+    <link rel="stylesheet" href="~/css/homeindex.css">
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+    <style>
+        .pagination-container {
+            text-align: right;
+        }
+
+        .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+            background-color: #4c4c4c;
+        }
+
+        .pagination a {
+            color: #000000;
+        }
+    </style>
+}

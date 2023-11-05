@@ -1,0 +1,128 @@
+﻿@using PagedList.Mvc;
+@using PagedList;
+@model IEnumerable<FProjectCampingBackend.Models.ViewModels.RoomsVm>
+
+@{
+    ViewBag.Title = "房型管理";
+}
+
+<h2>房型管理</h2>
+
+
+<div class="mb-3" style="width:100%">
+    <form action="" method="get">
+        <div class="" style="width: 100%; display: flex; flex-wrap: wrap; align-items: center;">
+            <div>
+                營區房型:@Html.DropDownList("RoomTypeId", null, new { @class = "form-select form-control-sm me-3", style = "width:auto;display:inline-block;" })
+            </div>
+
+            <div>
+                <input type="submit" value="查詢" class="btn btn-primary" />
+            </div>
+
+
+        </div>
+    </form>
+</div>
+<div class="text-start">
+    @Html.ActionLink("新增", "Create", null, new { @class = "btn btn-dark mb-3" })
+</div>
+<table class="table table-striped">
+
+    <tr class="table-dark">
+        <th>
+            @Html.DisplayNameFor(model => model.Photo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RoomTypeName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RoomName)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.WeekendPrice)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.WeekdayPrice)
+        </th>
+
+        <th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+
+                @if (item.Photo == null)
+                {
+                    <div class="roomsPhoto">
+                        <img src="~/images/camping_no.jpg" alt="" class="img-fluid RoomsPhoto">
+                    </div>
+                }
+                else
+                {
+                    <div class="roomsPhoto">
+                        <img src="/files/@Html.DisplayFor(modelItem => item.Photo)" alt="@item.RoomTypeName" class="img-fluid " />
+                    </div>
+                }
+
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.RoomTypeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.RoomName)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelitem => item.Description)
+            </td>
+            <td>
+                @string.Format("${0}", Html.DisplayFor(modelitem => item.WeekendPrice))
+            </td>
+            <td>
+                @string.Format("${0}", Html.DisplayFor(modelitem => item.WeekdayPrice))
+            </td>
+            <td>
+                <i class="bi bi-pen-fill"></i>
+                @Html.ActionLink("編輯", "Edit", new { id = item.Id }, new { @class = "me-2" })
+
+                <div class="form-actions no-color">
+                    <i class="bi bi-x-circle-fill"></i>
+                    <a href="#" class="delete-link" data-id="@item.Id">刪除</a>
+                </div>
+
+
+
+
+            </td>
+
+
+        </tr>
+    }
+</table>
+
+
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new
+{
+    page,
+    RoomTypeId = Request.QueryString["RoomTypeId"],
+
+}))
+
+@section Scripts{
+
+    <script src="~/js/RoomDelete.js"></script>
+}
+@section css{
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+    <link href="~/css/roomIndex.css" rel="stylesheet" />
+}

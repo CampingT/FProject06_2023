@@ -1,0 +1,34 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace FProjectCamping.Models.Infra.FileValidators
+{
+	public class FileSizeValidator : IFileValidator
+	{
+		private readonly int _maxBytes, _maxKBs;
+		public FileSizeValidator(int maxKBs)
+		{
+			if (maxKBs <= 0)
+			{
+				throw new ArgumentException("maxKBs must be greater than zero");
+			}
+			_maxKBs = maxKBs;
+			_maxBytes = maxKBs * 1024;
+
+		}
+
+		public void Validate(HttpPostedFileBase file)
+		{
+			if (file == null || file.ContentLength == 0) return;
+
+			double fileSizeInKB = file.ContentLength / 1024.0;
+			if (fileSizeInKB > _maxBytes)
+			{
+				throw new Exception($"檔案太大了，必須小於" + _maxKBs + "KB." + "實際大小:" + fileSizeInKB);
+			}
+
+		}
+	}
+}

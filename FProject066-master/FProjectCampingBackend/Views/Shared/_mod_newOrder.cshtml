@@ -1,0 +1,51 @@
+﻿@{ 
+    var newOrders = ViewBag.NewOrders as IEnumerable<FProjectCampingBackend.Models.ViewModels.OrderMemberNewVm>;
+}
+
+       <table class="table table-striped ">
+            <thead>
+                <tr>
+                    <th>編號</th>
+                    <th>帳號</th>
+                    <th>房號</th>
+                    <th>入住日</th>
+                    <th>夜數</th>
+    
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in newOrders)
+                {
+                    <tr>
+
+                        <td>@item.OrderNumber</td>
+                        <td>
+
+
+
+                            @if (item.Photo == null)
+                            {
+                                <div class="memberPhoto">
+                                    <img src="/images/camping_no.jpg" alt="大頭照" class="img-fluid memberPhoto">
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="memberPhoto">
+                                    <img src="/files/@Html.DisplayFor(modelItem => item.Photo)" alt="@item.Account" class="img-fluid" />
+                                </div>
+
+
+                            }
+                            @item.Account
+                        </td>
+                         <td>@item.RoomName</td>
+                        <td>@item.CheckInDate.ToString("yyyy/MM/dd")</td>
+                        <td>@item.Days</td>
+
+
+                    </tr>
+                }
+            </tbody>
+        </table>

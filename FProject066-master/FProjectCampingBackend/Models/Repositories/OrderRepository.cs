@@ -1,0 +1,54 @@
+﻿using FProjectCampingBackend.Models.EFModels;
+using FProjectCampingBackend.Models.Services;
+using FProjectCampingBackend.Models.ViewModels;
+using FProjectCampingBackend.Models.ViewModels.Orders;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace FProjectCampingBackend.Models.Repositories
+{
+	public class OrderRepository
+	{
+		private AppDbContext db; // Your DbContext 類別
+
+		public OrderRepository(AppDbContext dbContext)
+		{
+			db = dbContext;
+		}
+
+		public IQueryable<Order> GetOrders(SearchParameterVm vm)
+		{
+			IQueryable<Order> parameter = db.Orders;
+
+			if (!string.IsNullOrEmpty(vm.OrderNumber))
+			{
+				parameter = parameter.Where(x => x.OrderNumber.Contains(vm.OrderNumber));
+			}
+			if (!string.IsNullOrEmpty(vm.Name))
+			{
+				parameter = parameter.Where(x => x.Name.Contains(vm.Name));
+			}
+
+			if (vm.FirstTime != null)
+			{
+				parameter = parameter.Where(x => x.OrderTime >= vm.FirstTime);
+			}
+
+			if (vm.EndTime != null)
+			{
+				DateTime endDatePlusOneDay = vm.EndTime.Value.AddDays(1);
+
+				parameter = parameter.Where(x => x.OrderTime <= endDatePlusOneDay);
+			}
+
+			if (vm.Status != null)
+			{
+				parameter = parameter.Where(x => x.Status == vm.Status);
+			}
+
+			return parameter;
+		}
+	}
+}

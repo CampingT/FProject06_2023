@@ -1,0 +1,76 @@
+﻿
+@using PagedList.Mvc;
+@using PagedList;
+@model IEnumerable<FProjectCampingBackend.Models.ViewModels.Orders.TodayCheckVm>
+
+
+<table class="table table-striped ">
+    <thead>
+        <tr>
+            <th>房型</th>
+            <th>房號</th>
+            <th>訂單編號</th>
+            <th>會員帳號</th>
+            <th>入住日</th>
+            <th>退房日</th>
+            <th>夜數</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var todayCheck in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => todayCheck.RoomTypeName)
+
+                </td>
+                <td>
+                    <div class="roomPhoto">
+                        <img src="/files/@Html.DisplayFor(modelItem => todayCheck.RoomPhoto)" alt="@todayCheck.RoomName" class="img-fluid" />
+                    </div>
+                    <div>@todayCheck.RoomName</div>
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => todayCheck.OrderNumber)
+
+                </td>
+
+
+
+                <td>
+                    @if (todayCheck.Photo == null)
+                    {
+                        <div class="memberPhoto">
+                            <img src="/images/camping_no.jpg" alt="大頭照" class="img-fluid memberPhoto">
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="memberPhoto">
+                            <img src="/files/@Html.DisplayFor(modelItem => todayCheck.Photo)" alt="@todayCheck.Account" class="img-fluid" />
+                        </div>
+
+
+                    }
+
+                    @todayCheck.Account
+                </td>
+                <td>
+                    @todayCheck.CheckInDate.ToString("yyyy/MM/dd")
+
+                </td>
+                <td>
+                    @todayCheck.CheckOutDate.ToString("yyyy/MM/dd")
+
+                </td>
+                <td>
+                    @todayCheck.Days
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+@Html.PagedListPager((IPagedList)Model, x => Url.Action("Index", new { page = x }))

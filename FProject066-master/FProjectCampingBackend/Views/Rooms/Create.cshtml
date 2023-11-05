@@ -1,0 +1,100 @@
+﻿@model FProjectCampingBackend.Models.ViewModels.RoomsVm
+
+@{
+    ViewBag.Title = "新增房型";
+}
+
+<div class="container text-center">
+    <div class="editarea">
+
+        <div class="mainright">
+            <h2 class="mainright_title">新增房型</h2>
+            <div class="roomsPhoto">
+                <img src="~/images/camping_no.jpg" alt="room" class="img-fluid" id="filePreview" />
+            </div>
+
+            @using (Html.BeginForm("Create", "Rooms", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal editrightarea">
+                     <div class="mb-3 w-100">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @*@Html.HiddenFor(model => model.Id)*@
+                     </div>
+
+                    <div class="mb-3 right1">
+                        @Html.LabelFor(model => model.RoomTypeId, "房型類型", htmlAttributes: new { @class = "form-label col-md-6" })
+
+                        @Html.DropDownListFor(model => model.RoomTypeId, (SelectList)ViewBag.RoomTypes, new { @class = "form-select" })
+                        @Html.ValidationMessageFor(model => model.RoomTypeId, "", new { @class = "text-danger" })
+                    </div>
+
+
+                    <div class="mb-3 right1">
+                        @Html.LabelFor(model => model.RoomName, "房型名稱", htmlAttributes: new { @class = "form-label col-md-6" })
+
+                        @Html.EditorFor(model => model.RoomName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.RoomName, "", new { @class = "text-danger" })
+                    </div>
+
+
+
+                    <div class="mb-3 right1">
+                        @Html.LabelFor(model => model.WeekdayPrice, "平日價格", htmlAttributes: new { @class = "form-label col-md-6" })
+
+                        @Html.EditorFor(model => model.WeekdayPrice, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.WeekdayPrice, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-3 right1">
+                        @Html.LabelFor(model => model.WeekendPrice, "假日價格", htmlAttributes: new { @class = "form-label col-md-6" })
+
+                        @Html.EditorFor(model => model.WeekendPrice, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.WeekendPrice, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-3 right1">
+                        @Html.LabelFor(model => model.Description, "房型描述", htmlAttributes: new { @class = "form-label col-md-6" })
+
+                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control custom-textarea", rows = 8, cols = 40 })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="mb-3 right1">
+                        <label for="formFile" class="form-label">上傳照片</label>
+                        <input class="form-control" type="file" name="myfile" id="formFile">
+                        @Html.ValidationMessage("myfile", "", new { @class = "text-danger" })
+                    </div>
+
+
+                </div>
+                <div class="mb-3">
+                    <div class="text-end">
+                        <input type="submit" value="新增" class="btn btn-dark" id="filePreview" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>
+
+<div>
+    <div class="text-end mt-3 backtomember">
+        <i class="bi bi-arrow-left-square-fill"></i>
+        @Html.ActionLink("回到房型管理", "Index")
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/js/ViewChange.js"></script>
+}
+
+@section css{
+    <link rel="stylesheet" href="~/css/memberedit.css">
+
+
+
+}
